@@ -2398,7 +2398,7 @@ step "Deploy DataPipeline Database" {
             Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings = "True"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
-            Octopus.Action.Package.PackageId = "MHJ.Dayforce.DataPipeline.Database"
+            Octopus.Action.Package.PackageId = "api-package"
             Octopus.Action.RunOnServer = "false"
         }
         worker_pool_variable = ""
@@ -2486,7 +2486,7 @@ step "Deploy Web App" {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
             Octopus.Action.Package.JsonConfigurationVariablesTargets = "**\\*.json"
-            Octopus.Action.Package.PackageId = "MHJ.Dayforce.DataPipeline.Web"
+            Octopus.Action.Package.PackageId = "api-package"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Default Worker Pool"
@@ -2516,7 +2516,7 @@ step "Deploy Function App" {
             Octopus.Action.Azure.UseChecksum = "False"
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
-            Octopus.Action.Package.PackageId = "MHJ.Dayforce.Integrations.Onyx.Service"
+            Octopus.Action.Package.PackageId = "api-package"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Default Worker Pool"
