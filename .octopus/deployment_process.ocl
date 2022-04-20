@@ -2385,40 +2385,6 @@ step "Setup Web App" {
     }
 }
 
-step "Create Web App Deployment Target" {
-
-    action {
-        properties = {
-            AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
-            EnvironmentName = "#{Octopus.Environment.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-541"
-            Octopus.Action.Template.Version = "10"
-            OctopusRoles = "dayforce-data-pipeline-app"
-            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
-            TargetName = "#{Octopus.DeploymentTarget.WebApp}"
-            WebAppName = "#{Azure.AppName}"
-        }
-        worker_pool = "Default Worker Pool"
-    }
-}
-
-step "Create Function App Deployment Target" {
-
-    action {
-        properties = {
-            AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
-            EnvironmentName = "#{Octopus.Environment.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-541"
-            Octopus.Action.Template.Version = "10"
-            OctopusRoles = "dayforce-integrations-onyx"
-            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
-            TargetName = "#{Octopus.DeploymentTarget.FunctionApp}"
-            WebAppName = "#{Azure.FunctionAppName}"
-        }
-        worker_pool = "Default Worker Pool"
-    }
-}
-
 step "Deploy DataPipeline Database" {
     properties = {
         Octopus.Action.TargetRoles = "azure-sql"
