@@ -2391,7 +2391,7 @@ step "Create Web App Deployment Target" {
         properties = {
             AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
             EnvironmentName = "#{Octopus.Environment.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-541"
+            Octopus.Action.Template.Id = "ActionTemplates-1133"
             Octopus.Action.Template.Version = "10"
             OctopusRoles = "dayforce-data-pipeline-app"
             ResourceGroupName = "#{Azure.ResourceGroup.Name}"
@@ -2408,7 +2408,7 @@ step "Create Function App Deployment Target" {
         properties = {
             AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
             EnvironmentName = "#{Octopus.Environment.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-541"
+            Octopus.Action.Template.Id = "ActionTemplates-1133"
             Octopus.Action.Template.Version = "10"
             OctopusRoles = "dayforce-integrations-onyx"
             ResourceGroupName = "#{Azure.ResourceGroup.Name}"
