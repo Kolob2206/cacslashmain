@@ -1,16 +1,2859 @@
-step "Run a Script" {
-    properties = {
-        Octopus.Action.TargetRoles = "client"
+step "Deploy KeyVault" {
+
+    action {
+        action_type = "Octopus.AzureResourceGroup"
+        excluded_environments = ["Production"]
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Azure.ResourceGroupDeploymentMode = "Incremental"
+            Octopus.Action.Azure.ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            Octopus.Action.Azure.ResourceGroupTemplate = <<-EOT
+                {
+                  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                  "contentVersion": "1.0.0.0",
+                  "parameters": {
+                    "site_name": {
+                      "defaultValue": "mhg-development-dayforce-data-pipeline",
+                      "type": "String"
+                    },
+                    "app_service_plan": {
+                      "defaultValue": "DEV-AE-AppService",
+                      "type": "String"
+                    },
+                    "app_service_plan_resource_group": {
+                      "defaultValue": "DEV-AE-PeopleApp-Development",
+                      "type": "String"
+                    },
+                    "Azure.FunctionAppName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The name of the function app that you wish to create."
+                      }
+                    },
+                    "Azure.KeyVault": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The name of the Vault that you wish to use."
+                      }
+                    },
+                    "Azure.StorageAccountName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The name of the Vault that you wish to use."
+                      }
+                    },
+                    "EnvironmentName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "The name of the Environment that you wish to use."
+                      }
+                    },
+                    "dayforce-api-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Dayforce API password."
+                      }
+                    },
+                    "dayforce-api-username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Dayforce API username."
+                      }
+                    },
+                    "adp-etivity-transfer-storage-connection": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "adp-etivity-transfer-storage-connection"
+                      }
+                    },
+                    "adp-pgp-passphrase": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "adp-pgp-passphrase"
+                      }
+                    },
+                    "adp-pgp-privatekey": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "adp-pgp-privatekey"
+                      }
+                    },
+                    "adp-sftp-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "adp-sftp-password"
+                      }
+                    },
+                    "adp-sftp-username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "adp-sftp-username"
+                      }
+                    },
+                    "clicksend-api-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "clicksend-api-password"
+                      }
+                    },
+                    "clicksend-api-username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "clicksend-api-username"
+                      }
+                    },
+                    "dayforce-sftp-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "dayforce-sftp-password"
+                      }
+                    },
+                    "dayforce-sftp-username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "dayforce-sftp-username"
+                      }
+                    },
+                    "dayforce-ui-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "dayforce-ui-password"
+                      }
+                    },
+                    "dayforce-ui-username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "dayforce-ui-username"
+                      }
+                    },
+                    "email-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "email-password"
+                      }
+                    },
+                    "exchange-admin-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "exchange-admin-password"
+                      }
+                    },
+                    "pageup-newhire-email-password": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "pageup-newhire-email-password"
+                      }
+                    },
+                    "storageAccountType": {
+                      "type": "string",
+                      "defaultValue": "Standard_LRS",
+                      "allowedValues": [
+                        "Standard_LRS",
+                        "Standard_GRS",
+                        "Standard_RAGRS"
+                      ],
+                      "metadata": {
+                        "description": "Storage Account type"
+                      }
+                    },
+                    "ClickSend.BaseServiceUrl": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "ClickSend.BaseServiceUrl"
+                      }
+                    },
+                    "DataPipeline.ConnectionString": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "DataPipeline.ConnectionString"
+                      }
+                    },
+                    "Dayforce.SoapApi.Url": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Dayforce.SoapApi.Url"
+                      }
+                    },
+                    "Email.DisplayName": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.DisplayName"
+                      }
+                    },
+                    "Email.FromAddress": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.FromAddress"
+                      }
+                    },
+                    "Email.Host": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.Host"
+                      }
+                    },
+                    "Email.Port": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.Port"
+                      }
+                    },
+                    "Email.StatusCheck.ToAddress": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.StatusCheck.ToAddress"
+                      }
+                    },
+                    "Email.Username": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Email.Username"
+                      }
+                    },
+                    "OperationalDataStore.ConnectionString": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "OperationalDataStore.ConnectionString"
+                      }
+                    },
+                    "Logging.Seq.ApiKey": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Logging.Seq.ApiKey"
+                      }
+                    },
+                    "Logging.Seq.Server": {
+                      "type": "string",
+                      "metadata": {
+                        "description": "Logging.Seq.Server"
+                      }
+                    }
+                  },
+                  "variables": {
+                    "keyVaultName": "[parameters('Azure.KeyVault')]",
+                    "functionAppName": "[parameters('Azure.FunctionAppName')]",
+                    "applicationInsightsName": "[concat(parameters('Azure.FunctionAppName'),'ins')]",
+                    "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                    "storageAccountName": "[concat('storage', uniqueString(resourceGroup().id))]",
+                    "storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+                    "deploymentApiVersion": "2019-09-01",
+                    "idApiVersion": "2018-11-30",
+                    "kvApiVersion": "2019-09-01",
+                    "tenantId": "[subscription().tenantId]"
+                  },
+                  "resources": [
+                    {
+                      "type": "Microsoft.KeyVault/vaults",
+                      "apiVersion": "2016-10-01",
+                      "name": "[variables('keyVaultName')]",
+                      "location": "[resourceGroup().location]",
+                      "dependsOn": [],
+                      "properties": {
+                        "enabledForDeployment": true,
+                        "enabledForTemplateDeployment": true,
+                        "enabledForDiskEncryption": true,
+                        "enableSoftDelete": true,
+                        "tenantId": "fff1b7fc-e70a-4033-9508-e3ac2e2544fa",
+                        "accessPolicies": [],
+                        "sku": {
+                          "name": "standard",
+                          "family": "A"
+                        }
+                      },
+                      "resources": [
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-api-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-api-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-api-username')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-api-username')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/adp-etivity-transfer-storage-connection')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('adp-etivity-transfer-storage-connection')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/adp-pgp-passphrase')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('adp-pgp-passphrase')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/adp-pgp-privatekey')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('adp-pgp-privatekey')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/adp-sftp-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('adp-sftp-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/adp-sftp-username')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('adp-sftp-username')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/clicksend-api-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('clicksend-api-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/clicksend-api-username')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('clicksend-api-username')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-sftp-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-sftp-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-sftp-username')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-sftp-username')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-ui-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-ui-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/dayforce-ui-username')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('dayforce-ui-username')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/email-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('email-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/exchange-admin-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('exchange-admin-password')]"
+                          }
+                        },
+                        {
+                          "type": "Microsoft.KeyVault/vaults/secrets",
+                          "name": "[concat(variables('keyVaultName'), '/pageup-newhire-email-password')]",
+                          "apiVersion": "2016-10-01",
+                          "dependsOn": [
+                            "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                          ],
+                          "properties": {
+                            "value": "[parameters('pageup-newhire-email-password')]"
+                          }
+                        }
+                      ]
+                    }
+                  ]
+                }
+            EOT
+            Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.ResourceGroup.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\"#{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheck.ToAddress\":{\"value\":\"#{Email.StatusCheck.ToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"}}"
+            Octopus.Action.Azure.TemplateSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
     }
+}
+
+step "Deploy Azure Apps" {
+
+    action {
+        action_type = "Octopus.AzureResourceGroup"
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Azure.ResourceGroupDeploymentMode = "Incremental"
+            Octopus.Action.Azure.ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            Octopus.Action.Azure.ResourceGroupTemplate = <<-EOT
+                {
+                	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                	"contentVersion": "1.0.0.0",
+                	"parameters": {
+                       "site_name":{
+                            "defaultValue": "mhg-development-dayforce-data-pipeline",
+                            "type": "String"
+                        },
+                		"app_service_plan": {
+                			"defaultValue": "DEV-AE-AppService",
+                			"type": "String"
+                		},
+                		"app_service_plan_resource_group": {
+                			"defaultValue": "DEV-AE-PeopleApp-Development",
+                			"type": "String"
+                		},
+                		"Azure.FunctionAppName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the function app that you wish to create."
+                			}
+                		},
+                		"Azure.KeyVault": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Vault that you wish to use."
+                			}
+                		},
+                       "Azure.StorageAccountName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Vault that you wish to use."
+                			}
+                		},
+                       "EnvironmentName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Environment that you wish to use."
+                			}
+                		},
+                       "dayforce-api-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce API password."
+                			}
+                		},
+                       "dayforce-api-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce API username."
+                			}
+                		},
+                      "adp-etivity-transfer-storage-connection": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-etivity-transfer-storage-connection"
+                			}
+                		},
+                      "adp-pgp-passphrase": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-pgp-passphrase"
+                			}
+                		},
+                      "adp-pgp-privatekey": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-pgp-privatekey"
+                			}
+                		},
+                      "adp-sftp-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-sftp-password"
+                			}
+                		},
+                      "adp-sftp-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-sftp-username"
+                			}
+                		},
+                      "clicksend-api-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "clicksend-api-password"
+                			}
+                		},
+                      "clicksend-api-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "clicksend-api-username"
+                			}
+                		},
+                      "dayforce-sftp-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-sftp-password"
+                			}
+                		},
+                      "dayforce-sftp-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-sftp-username"
+                			}
+                		},
+                      "dayforce-ui-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-ui-password"
+                			}
+                		},
+                      "dayforce-ui-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-ui-username"
+                			}
+                		},
+                      "email-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "email-password"
+                			}
+                		},
+                      "exchange-admin-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "exchange-admin-password"
+                			}
+                		},
+                      "pageup-newhire-email-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "pageup-newhire-email-password"
+                			}
+                		},
+                		"storageAccountType": {
+                			"type": "string",
+                			"defaultValue": "Standard_LRS",
+                			"allowedValues": [
+                				"Standard_LRS",
+                				"Standard_GRS",
+                				"Standard_RAGRS"
+                			],
+                			"metadata": {
+                				"description": "Storage Account type"
+                			}
+                		},
+                       "ClickSend.BaseServiceUrl": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "ClickSend.BaseServiceUrl"
+                			}
+                		},
+                       "DataPipeline.ConnectionString": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "DataPipeline.ConnectionString"
+                			}
+                		},
+                       "Dayforce.SoapApi.Url": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce.SoapApi.Url"
+                			}
+                		},
+                       "Email.DisplayName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.DisplayName"
+                			}
+                		},
+                      "Email.FromAddress": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.FromAddress"
+                			}
+                		},
+                      "Email.Host": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Host"
+                			}
+                		},
+                      "Email.Port": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Port"
+                			}
+                		},
+                      "Email.StatusCheckToAddress": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.StatusCheckToAddress"
+                			}
+                		},
+                       "Email.Username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Username"
+                			}
+                		},
+                       "Email.To": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.To"
+                			}
+                		},
+                        "Email.ToFinance": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.ToFinance"
+                			}
+                		},
+                      
+                     "OperationalDataStore.ConnectionString": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "OperationalDataStore.ConnectionString"
+                			}
+                		},
+                       "Logging.Seq.ApiKey": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Logging.Seq.ApiKey"
+                			}
+                		},
+                       "Logging.Seq.Server": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Logging.Seq.Server"
+                			}
+                		},
+                       "SFTP.ServerSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.ServerSecret"
+                			}
+                		},
+                       "SFTP.UsernameSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.UsernameSecret"
+                			}
+                		},
+                       "SFTP.PasswordSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.PasswordSecret"
+                			}
+                		},
+                      "SFTP.FileRemoval.DaysToKeep": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.PasswordSecret"
+                			}
+                		}
+                    },
+                	"variables": {
+                		"keyVaultName": "[parameters('Azure.KeyVault')]",
+                		"functionAppName": "[parameters('Azure.FunctionAppName')]",
+                		"applicationInsightsName": "[concat(parameters('Azure.FunctionAppName'),'ins')]",
+                		"serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                		"storageAccountName": "[concat('storage', uniqueString(resourceGroup().id))]",
+                		"storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+                        "deploymentApiVersion": "2019-09-01",
+                    	"idApiVersion": "2018-11-30",
+                    	"kvApiVersion": "2019-09-01",
+                    	"tenantId": "[subscription().tenantId]"
+                   },
+                	"resources": [
+                		{
+                			"type": "Microsoft.Storage/storageAccounts",
+                			"name": "[variables('storageAccountName')]",
+                			"apiVersion": "2018-11-01",
+                			"location": "[resourceGroup().location]",
+                			"kind": "StorageV2",
+                			"sku": {
+                				"name": "[parameters('storageAccountType')]"
+                			},
+                			"properties": {
+                				"supportsHttpsTrafficOnly": true,
+                				"networkAcls": {
+                					"value": {
+                						"defaultAction": "Deny",
+                						"bypass": "AzureServices"
+                					}
+                				}
+                			}
+                		},
+                	  	{
+                            "type": "microsoft.insights/components",
+                            "apiVersion": "2018-05-01-preview",
+                            "name": "[parameters('site_name')]",
+                            "location": "australiaeast",
+                            "kind": "web",
+                            "properties": {
+                                "Application_Type": "web"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "apiVersion": "2018-11-01",
+                            "name": "[parameters('site_name')]",
+                            "location": "Australia East",
+                            "kind": "app",
+                            "identity": {
+                                  "type": "SystemAssigned"
+                            },
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('site_name'), '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('site_name'), '.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                                "reserved": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/web')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php",
+                                    "hostingstart.html"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "7.3",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "$parameters('site_name')",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": true,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": true
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "autoHealEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": true,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/', parameters('site_name'), '.azurewebsites.net')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "properties": {
+                                "siteName": "[parameters('site_name')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                      {
+                            "type": "Microsoft.Web/sites/slots",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue')]",
+                            "location": "Australia East",
+                         	"dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "kind": "app",
+                        	"identity": {
+                				"type": "SystemAssigned"
+                			},
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('site_name'), '-blue', '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('site_name'), '-blue','.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                                "reserved": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/slots/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue/web')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('site_name'),'blue')]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php",
+                                    "hostingstart.html"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "7.3",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "$parameters('site_name')",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": true,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": true
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "autoHealEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": true,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/slots/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue/', parameters('site_name'),'-blue', '.azurewebsites.net')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue')]"
+                            ],
+                            "properties": {
+                                "siteName": "[concat(parameters('site_name'),'(blue)')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                        {
+                			"type": "microsoft.insights/components",
+                			"apiVersion": "2018-05-01-preview",
+                			"name": "[variables('applicationInsightsName')]",
+                			"location": "[resourceGroup().location]",
+                			"kind": "web",
+                			"properties": {
+                				"Application_Type": "web"
+                			}
+                		},
+                        {
+                			"apiVersion": "2018-11-01",
+                			"type": "Microsoft.Web/sites",
+                			"name": "[variables('functionAppName')]",
+                			"identity": {
+                				"type": "SystemAssigned"
+                			},
+                			"location": "Australia East",
+                			"kind": "functionapp",
+                			"dependsOn": [
+                				"[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                				"[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
+                			],
+                			"resources": [{
+                					"type": "config",
+                					"name": "appsettings",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                					],
+                					"properties": {
+                						"AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                					    "ActualPayDaysToDelete": "15",
+                						"APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('microsoft.insights/components/', variables('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                						"Azure.KeyVault": "[variables('keyVaultName')]",
+                						"AzureStorage.ConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                						"AzureStorage.Container": "",
+                						"AzureWebJobs.DayforceReportColumnNames.Disabled": "0",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreDaily.Disabled": "1",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreWeekly.Disabled": "1",
+                						"AzureWebJobs.ExtractHoursDataFromDayforceAndImportToOperationalDataStore.Disabled": "1",
+                						"AzureWebJobs.RunDataPipelineSchedule.Disabled": "0",
+                						"AzureWebJobs.RunSpecificDataPipeline.Disabled": "0",
+                						"AzureWebJobs.SchemaDiscrepanciesBetweenDayforceReportsAndOdsTables.Disabled": "1",
+                						"AzureWebJobs.SendNotificationEmails.Disabled": "1",
+                						"AzureWebJobs.Status.Disabled": "0",
+                						"AzureWebJobs.TriggerDataPipelineSchedule.Disabled": 1,
+                						"ClickSend.BaseServiceUrl": "[parameters('ClickSend.BaseServiceUrl')]",
+                						"ClickSend.PasswordSecret": "clicksend-api-password",
+                						"ClickSend.UsernameSecret": "clicksend-api-username",
+                						"CronSchedule": "0 0 4,6,8,10,12,14,16,18,20,22 * * *",
+                						"DataPipeline.ApplyDataMaskingOnUpdate": "true",
+                						"DataPipeline.ConnectionString": "[parameters('DataPipeline.ConnectionString')]",
+                						"DataPipeline.CronSchedule": "0 */5 * * * *",
+                						"DataPipeline.DynamicAdjustingWindow": "true",
+                						"DataPipelineValidation.CronSchedule": "0 */5 * * * *",
+                						"Dayforce.CompanyName": "MHJ",
+                						"Dayforce.SoapApi.BypassApiForReportList": "",
+                						"Dayforce.SoapApi.PasswordSecret": "dayforce-api-password",
+                						"Dayforce.SoapApi.Url": "[parameters('Dayforce.SoapApi.Url')]",
+                						"Dayforce.SoapApi.UsernameSecret": "dayforce-api-username",
+                						"DayforceApiTimeoutInMinutes": "15",
+                						"DaysAgoStartDate": "7",
+                						"DaysOfNewOrModifiedHoursDataToImport": "5",
+                						"Email.DisplayName": "[parameters('Email.DisplayName')]",
+                						"Email.FromAddress": "[parameters('Email.FromAddress')]",
+                						"Email.Host": "[parameters('Email.Host')]",
+                                      	"Email.To": "[parameters('Email.To')]",
+                                      	"Email.ToFinance": "[parameters('Email.ToFinance')]",
+                						"Email.Port": "[parameters('Email.Port')]",
+                						"Email.StatusCheckToAddress": "[parameters('Email.StatusCheckToAddress')]",
+                						"Email.Username":"[parameters('Email.Username')]",
+                						"EmailScheduleTriggerTime": "0 */5 * * * *",
+                						"Environment": "[parameters('EnvironmentName')]",
+                						"FUNCTIONS_EXTENSION_VERSION": "~3",
+                						"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                						"Logging.Seq.ApiKey": "[parameters('Logging.Seq.ApiKey')]",
+                						"Logging.Seq.Server": "[parameters('Logging.Seq.Server')]",
+                						"MinimumNumberOfDaysToKeepDayforceNotificationHistory": "30",
+                						"MinimumNumberOfDaysToKeepEmailNotificationHistory": "30",
+                						"OperationalDataStore.ConnectionString":  "[parameters('OperationalDataStore.ConnectionString')]",
+                						"PurgeDayforceNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"PurgeEmailNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"RetryCount": "2",
+                						"RetryIntervalInMinutes": "2",
+                						"SendScheduledDayforceNotificationsTriggerTime": "0 */5 * * * *",
+                                      	"SFTP.ServerSecret": "[parameters('SFTP.ServerSecret')]",
+                    					"SFTP.UsernameSecret": "[parameters('SFTP.UsernameSecret')]",
+                    					"SFTP.PasswordSecret": "[parameters('SFTP.PasswordSecret')]",
+                						"WEBSITE_TIME_ZONE": "E. Australia Standard Time"
+                					}
+                				},
+                				{
+                					"type": "config",
+                					"name": "web",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                					],
+                					"properties": {
+                						"ftpsState": "FtpsOnly"
+                					}
+                				}
+                			],
+                            "properties": {
+                              "serverFarmId" :"[variables('serverFarmId')]",
+                              "httpsOnly": true
+                            }
+                		},
+                       {
+                			"apiVersion": "2018-11-01",
+                			"type": "Microsoft.Web/sites/slots",
+                			"name": "[concat(variables('functionAppName'),'/blue')]",
+                			"identity": {
+                				"type": "SystemAssigned"
+                			},
+                			"location": "Australia East",
+                			"kind": "functionapp",
+                			"dependsOn": [
+                				"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                			],
+                			"resources": [{
+                					"type": "config",
+                					"name": "appsettings",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites/slots', variables('functionAppName'),'blue')]"
+                					],
+                					"properties": {
+                						"AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                					    "ActualPayDaysToDelete": "15",
+                						"APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('microsoft.insights/components/', variables('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                						"Azure.KeyVault": "[variables('keyVaultName')]",
+                						"AzureStorage.ConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                						"AzureStorage.Container": "",
+                						"AzureWebJobs.DayforceReportColumnNames.Disabled": "0",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreDaily.Disabled": "1",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreWeekly.Disabled": "1",
+                						"AzureWebJobs.ExtractHoursDataFromDayforceAndImportToOperationalDataStore.Disabled": "1",
+                						"AzureWebJobs.RunDataPipelineSchedule.Disabled": "0",
+                						"AzureWebJobs.RunSpecificDataPipeline.Disabled": "0",
+                						"AzureWebJobs.SchemaDiscrepanciesBetweenDayforceReportsAndOdsTables.Disabled": "1",
+                						"AzureWebJobs.SendNotificationEmails.Disabled": "1",
+                						"AzureWebJobs.Status.Disabled": "0",
+                						"AzureWebJobs.TriggerDataPipelineSchedule.Disabled": 1,
+                						"ClickSend.BaseServiceUrl": "[parameters('ClickSend.BaseServiceUrl')]",
+                						"ClickSend.PasswordSecret": "clicksend-api-password",
+                						"ClickSend.UsernameSecret": "clicksend-api-username",
+                						"CronSchedule": "0 0 4,6,8,10,12,14,16,18,20,22 * * *",
+                						"DataPipeline.ApplyDataMaskingOnUpdate": "true",
+                						"DataPipeline.ConnectionString": "[parameters('DataPipeline.ConnectionString')]",
+                						"DataPipeline.CronSchedule": "0 */5 * * * *",
+                						"DataPipeline.DynamicAdjustingWindow": "true",
+                						"DataPipelineValidation.CronSchedule": "0 */5 * * * *",
+                						"Dayforce.CompanyName": "MHJ",
+                						"Dayforce.SoapApi.BypassApiForReportList": "",
+                						"Dayforce.SoapApi.PasswordSecret": "dayforce-api-password",
+                						"Dayforce.SoapApi.Url": "[parameters('Dayforce.SoapApi.Url')]",
+                						"Dayforce.SoapApi.UsernameSecret": "dayforce-api-username",
+                						"DayforceApiTimeoutInMinutes": "15",
+                						"DaysAgoStartDate": "7",
+                						"DaysOfNewOrModifiedHoursDataToImport": "5",
+                						"Email.DisplayName": "[parameters('Email.DisplayName')]",
+                						"Email.FromAddress": "[parameters('Email.FromAddress')]",
+                						"Email.Host": "[parameters('Email.Host')]",
+                						"Email.Port": "[parameters('Email.Port')]",
+                                      	"Email.To": "[parameters('Email.To')]",
+                                      	"Email.ToFinance": "[parameters('Email.ToFinance')]",
+                						"Email.StatusCheckToAddress": "[parameters('Email.StatusCheckToAddress')]",
+                						"Email.Username":"[parameters('Email.Username')]",
+                						"EmailScheduleTriggerTime": "0 */5 * * * *",
+                						"Environment": "[parameters('EnvironmentName')]",
+                						"FUNCTIONS_EXTENSION_VERSION": "~3",
+                						"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                						"Logging.Seq.ApiKey": "[parameters('Logging.Seq.ApiKey')]",
+                						"Logging.Seq.Server": "[parameters('Logging.Seq.Server')]",
+                						"MinimumNumberOfDaysToKeepDayforceNotificationHistory": "30",
+                						"MinimumNumberOfDaysToKeepEmailNotificationHistory": "30",
+                						"OperationalDataStore.ConnectionString":  "[parameters('OperationalDataStore.ConnectionString')]",
+                						"PurgeDayforceNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"PurgeEmailNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"RetryCount": "2",
+                						"RetryIntervalInMinutes": "2",
+                						"SendScheduledDayforceNotificationsTriggerTime": "0 */5 * * * *",
+                                      	"SFTP.ServerSecret": "[parameters('SFTP.ServerSecret')]",
+                    					"SFTP.UsernameSecret": "[parameters('SFTP.UsernameSecret')]",
+                    					"SFTP.PasswordSecret": "[parameters('SFTP.PasswordSecret')]",
+                						"WEBSITE_TIME_ZONE": "E. Australia Standard Time"
+                					}
+                				},
+                				{
+                					"type": "config",
+                					"name": "web",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites/slots', variables('functionAppName'),'blue')]"
+                					],
+                					"properties": {
+                						"ftpsState": "FtpsOnly"
+                					}
+                				}
+                			],
+                            "properties": {
+                              "serverFarmId" :"[variables('serverFarmId')]",
+                              "httpsOnly": true
+                            }
+                		}
+                   ]
+                }
+            EOT
+            Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\" #{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheckToAddress\":{\"value\":\"#{Email.StatusCheckToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"Email.To\":{\"value\":\"#{Email.To}\"},\"Email.ToFinance\":{\"value\":\"#{Email.ToFinance}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"},\"SFTP.ServerSecret\":{\"value\":\"#{SFTP.ServerSecret}\"},\"SFTP.UsernameSecret\":{\"value\":\"#{SFTP.UsernameSecret}\"},\"SFTP.PasswordSecret\":{\"value\":\"#{SFTP.PasswordSecret}\"},\"SFTP.FileRemoval.DaysToKeep\":{\"value\":\"#{SFTP.FileRemoval.DaysToKeep}\"}}"
+            Octopus.Action.Azure.TemplateSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Assign KeyVault AccesPolicies" {
+
+    action {
+        action_type = "Octopus.AzureResourceGroup"
+        excluded_environments = ["Production"]
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Azure.ResourceGroupDeploymentMode = "Incremental"
+            Octopus.Action.Azure.ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            Octopus.Action.Azure.ResourceGroupTemplate = <<-EOT
+                {
+                    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+                    "contentVersion": "1.0.0.0",
+                    "parameters": {
+                        "site_name": {
+                            "defaultValue": "mhg-development-dayforce-data-pipeline",
+                            "type": "String"
+                        },
+                        "app_service_plan": {
+                            "defaultValue": "DEV-AE-AppService",
+                            "type": "String"
+                        },
+                        "app_service_plan_resource_group": {
+                            "defaultValue": "DEV-AE-PeopleApp-Development",
+                            "type": "String"
+                        },
+                        "Azure.FunctionAppName": {
+                            "type": "string",
+                            "metadata": {
+                                "description": "The name of the function app that you wish to create."
+                            }
+                        },
+                        "Azure.KeyVault": {
+                            "type": "string",
+                            "metadata": {
+                                "description": "The name of the Vault that you wish to use."
+                            }
+                        },
+                        "EnvironmentName": {
+                            "type": "string",
+                            "metadata": {
+                                "description": "The name of the Environment that you wish to use."
+                            }
+                        }
+                    },
+                    "variables": {
+                        "keyVaultName": "[parameters('Azure.KeyVault')]",
+                        "functionAppName": "[parameters('Azure.FunctionAppName')]",
+                        "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                        "deploymentApiVersion": "2019-09-01",
+                        "tenantId": "[subscription().tenantId]",
+                        "isProduction": "[equals(parameters('EnvironmentName'), 'Production')]"
+                    },
+                    "resources": [
+                        {
+                
+                            "type": "Microsoft.KeyVault/vaults",
+                            "apiVersion": "2016-10-01",
+                            "name": "[variables('keyVaultName')]",
+                            "location": "[resourceGroup().location]",
+                            "dependsOn": [],
+                            "properties": {
+                                "enabledForDeployment": true,
+                                "enabledForTemplateDeployment": true,
+                                "enabledForDiskEncryption": true,
+                                "enableSoftDelete": true,
+                                "tenantId": "fff1b7fc-e70a-4033-9508-e3ac2e2544fa",
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('functionAppName'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                        "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('functionAppName'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('site_name'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                        "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('site_name'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "tenantId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', variables('functionAppName'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                        "objectId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', variables('functionAppName'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "tenantId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                        "objectId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    }
+                                ],
+                                "sku": {
+                                    "name": "standard",
+                                    "family": "A"
+                                }
+                            }
+                        },
+                        {
+                            "name": "[concat(variables('keyVaultName'), '/add')]",
+                            "type": "Microsoft.KeyVault/vaults/accessPolicies",
+                            "apiVersion": "2019-09-01",
+                            "condition": "[not(variables('isProduction'))]",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]"
+                            ],
+                            "properties": {
+                                "accessPolicies": [
+                                    {
+                                        "tenantId": "[subscription().tenantId]",
+                                        "objectId": "017b711b-7ab6-43e5-9ea8-9a307cb5ddfd", 
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    },
+                                    {
+                                        "tenantId": "[subscription().tenantId]",
+                                        "objectId": "3c52e52a-5015-4df7-81c8-a4184a045042", 
+                                        "permissions": {
+                                            "secrets": [
+                                                "get",
+                                                "list"
+                                            ]
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                }
+            EOT
+            Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"EnvironmentName\":{\"value\":\"#{Octopus.Environment.Name}\"}}"
+            Octopus.Action.Azure.TemplateSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Setup Web App" {
+
+    action {
+        action_type = "Octopus.AzureResourceGroup"
+        is_disabled = true
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Azure.ResourceGroupDeploymentMode = "Incremental"
+            Octopus.Action.Azure.ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            Octopus.Action.Azure.ResourceGroupTemplate = <<-EOT
+                {
+                	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+                	"contentVersion": "1.0.0.0",
+                	"parameters": {
+                       "site_name":{
+                            "defaultValue": "mhg-development-dayforce-data-pipeline",
+                            "type": "String"
+                        },
+                		"app_service_plan": {
+                			"defaultValue": "DEV-AE-AppService",
+                			"type": "String"
+                		},
+                		"app_service_plan_resource_group": {
+                			"defaultValue": "DEV-AE-PeopleApp-Development",
+                			"type": "String"
+                		},
+                		"Azure.FunctionAppName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the function app that you wish to create."
+                			}
+                		},
+                		"Azure.KeyVault": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Vault that you wish to use."
+                			}
+                		},
+                       "Azure.StorageAccountName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Vault that you wish to use."
+                			}
+                		},
+                       "EnvironmentName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "The name of the Environment that you wish to use."
+                			}
+                		},
+                       "dayforce-api-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce API password."
+                			}
+                		},
+                       "dayforce-api-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce API username."
+                			}
+                		},
+                      "adp-etivity-transfer-storage-connection": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-etivity-transfer-storage-connection"
+                			}
+                		},
+                      "adp-pgp-passphrase": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-pgp-passphrase"
+                			}
+                		},
+                      "adp-pgp-privatekey": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-pgp-privatekey"
+                			}
+                		},
+                      "adp-sftp-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-sftp-password"
+                			}
+                		},
+                      "adp-sftp-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "adp-sftp-username"
+                			}
+                		},
+                      "clicksend-api-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "clicksend-api-password"
+                			}
+                		},
+                      "clicksend-api-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "clicksend-api-username"
+                			}
+                		},
+                      "dayforce-sftp-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-sftp-password"
+                			}
+                		},
+                      "dayforce-sftp-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-sftp-username"
+                			}
+                		},
+                      "dayforce-ui-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-ui-password"
+                			}
+                		},
+                      "dayforce-ui-username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "dayforce-ui-username"
+                			}
+                		},
+                      "email-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "email-password"
+                			}
+                		},
+                      "exchange-admin-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "exchange-admin-password"
+                			}
+                		},
+                      "pageup-newhire-email-password": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "pageup-newhire-email-password"
+                			}
+                		},
+                		"storageAccountType": {
+                			"type": "string",
+                			"defaultValue": "Standard_LRS",
+                			"allowedValues": [
+                				"Standard_LRS",
+                				"Standard_GRS",
+                				"Standard_RAGRS"
+                			],
+                			"metadata": {
+                				"description": "Storage Account type"
+                			}
+                		},
+                       "ClickSend.BaseServiceUrl": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "ClickSend.BaseServiceUrl"
+                			}
+                		},
+                       "DataPipeline.ConnectionString": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "DataPipeline.ConnectionString"
+                			}
+                		},
+                       "Dayforce.SoapApi.Url": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Dayforce.SoapApi.Url"
+                			}
+                		},
+                       "Email.DisplayName": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.DisplayName"
+                			}
+                		},
+                      "Email.FromAddress": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.FromAddress"
+                			}
+                		},
+                        "Email.To": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.To"
+                			}
+                		},
+                       "Email.Host": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Host"
+                			}
+                		},
+                      "Email.Port": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Port"
+                			}
+                		},
+                      "Email.StatusCheck.ToAddress": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.StatusCheck.ToAddress"
+                			}
+                		},
+                       "Email.Username": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Email.Username"
+                			}
+                		},
+                      
+                     "OperationalDataStore.ConnectionString": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "OperationalDataStore.ConnectionString"
+                			}
+                		},
+                       "Logging.Seq.ApiKey": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Logging.Seq.ApiKey"
+                			}
+                		},
+                       "Logging.Seq.Server": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "Logging.Seq.Server"
+                			}
+                		},
+                       "SFTP.ServerSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.ServerSecret"
+                			}
+                		},
+                       "SFTP.UsernameSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.UsernameSecret"
+                			}
+                		},
+                       "SFTP.PasswordSecret": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.PasswordSecret"
+                			}
+                		},
+                      "SFTP.FileRemoval.DaysToKeep": {
+                			"type": "string",
+                            "metadata": {
+                				"description": "SFTP.PasswordSecret"
+                			}
+                		}
+                    },
+                	"variables": {
+                		"keyVaultName": "[parameters('Azure.KeyVault')]",
+                		"functionAppName": "[parameters('Azure.FunctionAppName')]",
+                		"applicationInsightsName": "[concat(parameters('Azure.FunctionAppName'),'ins')]",
+                		"serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                		"storageAccountName": "[concat('storage', uniqueString(resourceGroup().id))]",
+                		"storageAccountid": "[concat(resourceGroup().id,'/providers/','Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
+                        "deploymentApiVersion": "2019-09-01",
+                    	"idApiVersion": "2018-11-30",
+                    	"kvApiVersion": "2019-09-01",
+                    	"tenantId": "[subscription().tenantId]"
+                   },
+                	"resources": [
+                		{
+                			"type": "Microsoft.Storage/storageAccounts",
+                			"name": "[variables('storageAccountName')]",
+                			"apiVersion": "2018-11-01",
+                			"location": "[resourceGroup().location]",
+                			"kind": "StorageV2",
+                			"sku": {
+                				"name": "[parameters('storageAccountType')]"
+                			},
+                			"properties": {
+                				"supportsHttpsTrafficOnly": true,
+                				"networkAcls": {
+                					"value": {
+                						"defaultAction": "Deny",
+                						"bypass": "AzureServices"
+                					}
+                				}
+                			}
+                		},
+                		{
+                
+                			"type": "Microsoft.KeyVault/vaults",
+                			"apiVersion": "2016-10-01",
+                			"name": "[variables('keyVaultName')]",
+                			"location": "[resourceGroup().location]",
+                			"dependsOn": [
+                            		 "[resourceId('Microsoft.Web/sites', parameters('site_name'))]",
+                               		 "[resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue')]",
+                              		 "[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+                               		 "[resourceId('Microsoft.Web/sites/slots', variables('functionAppName'),'blue')]"
+                            ],
+                			"properties": {
+                				"enabledForDeployment": true,
+                				"enabledForTemplateDeployment": true,
+                				"enabledForDiskEncryption": true,
+                				"enableSoftDelete": true,
+                                "tenantId" : "fff1b7fc-e70a-4033-9508-e3ac2e2544fa",
+                				 "accessPolicies": [
+                                  {
+                                    "tenantId": "[reference(concat('Microsoft.Web/sites/',  variables('functionAppName'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                    "objectId": "[reference(concat('Microsoft.Web/sites/',  variables('functionAppName'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                    "permissions": {
+                                    "secrets": [
+                                            "get",
+                                            "list"
+                                        ]
+                                    }
+                                  },
+                                  {
+                                    "tenantId": "[reference(concat('Microsoft.Web/sites/', parameters('site_name'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                    "objectId": "[reference(concat('Microsoft.Web/sites/', parameters('site_name'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                    "permissions": {
+                                    "secrets": [
+                                            "get",
+                                            "list"
+                                        ]
+                                    }
+                                  },
+                                  {
+                                    "tenantId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', variables('functionAppName'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                    "objectId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', variables('functionAppName'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                    "permissions": {
+                                    "secrets": [
+                                            "get",
+                                            "list"
+                                        ]
+                                    }
+                                  },
+                                    {
+                                    "tenantId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').tenantId]",
+                                    "objectId": "[reference(concat(resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue'), '/providers/Microsoft.ManagedIdentity/Identities/default'), '2015-08-31-PREVIEW').principalId]",
+                                    "permissions": {
+                                    "secrets": [
+                                            "get",
+                                            "list"
+                                        ]
+                                    }
+                                  }
+                                ],
+                				"sku": {
+                					"name": "standard",
+                					"family": "A"
+                				}
+                			 },
+                			"resources": [
+                              {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-api-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-api-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-api-username')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-api-username')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/adp-etivity-transfer-storage-connection')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('adp-etivity-transfer-storage-connection')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/adp-pgp-passphrase')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('adp-pgp-passphrase')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/adp-pgp-privatekey')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('adp-pgp-privatekey')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/adp-sftp-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('adp-sftp-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/adp-sftp-username')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('adp-sftp-username')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/clicksend-api-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('clicksend-api-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/clicksend-api-username')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('clicksend-api-username')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-sftp-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-sftp-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-sftp-username')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-sftp-username')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-ui-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-ui-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/dayforce-ui-username')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('dayforce-ui-username')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/email-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('email-password')]"
+                                 }
+                              },
+                              {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/exchange-admin-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('exchange-admin-password')]"
+                                 }
+                              },
+                               {
+                                 "type": "Microsoft.KeyVault/vaults/secrets",
+                                 "name": "[concat(variables('keyVaultName'), '/pageup-newhire-email-password')]",
+                                 "apiVersion": "2016-10-01",
+                                 "dependsOn": [
+                                     "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                                 ],
+                                 "properties": {
+                                     "value": "[parameters('pageup-newhire-email-password')]"
+                                 }
+                              }
+                           ]
+                		},
+                      	{
+                            "type": "microsoft.insights/components",
+                            "apiVersion": "2018-05-01-preview",
+                            "name": "[parameters('site_name')]",
+                            "location": "australiaeast",
+                            "kind": "web",
+                            "properties": {
+                                "Application_Type": "web"
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites",
+                            "apiVersion": "2018-11-01",
+                            "name": "[parameters('site_name')]",
+                            "location": "Australia East",
+                            "kind": "app",
+                            "identity": {
+                                  "type": "SystemAssigned"
+                            },
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('site_name'), '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('site_name'), '.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                                "reserved": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/web')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php",
+                                    "hostingstart.html"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "7.3",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "$parameters('site_name')",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": true,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": true
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "autoHealEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": true,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/', parameters('site_name'), '.azurewebsites.net')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "properties": {
+                                "siteName": "[parameters('site_name')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                      {
+                            "type": "Microsoft.Web/sites/slots",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue')]",
+                            "location": "Australia East",
+                         	"dependsOn": [
+                                "[resourceId('Microsoft.Web/sites', parameters('site_name'))]"
+                            ],
+                            "kind": "app",
+                        	"identity": {
+                				"type": "SystemAssigned"
+                			},
+                            "properties": {
+                                "enabled": true,
+                                "hostNameSslStates": [
+                                    {
+                                        "name": "[concat(parameters('site_name'), '-blue', '.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Standard"
+                                    },
+                                    {
+                                        "name": "[concat(parameters('site_name'), '-blue','.scm.azurewebsites.net')]",
+                                        "sslState": "Disabled",
+                                        "hostType": "Repository"
+                                    }
+                                ],
+                                "serverFarmId": "[concat('/subscriptions/29be1ffe-5a99-4eff-9135-2fe8ae6985de/resourcegroups/', parameters('app_service_plan_resource_group'), '/providers/Microsoft.Web/serverfarms/', parameters('app_service_plan'))]",
+                                "reserved": false,
+                                "clientAffinityEnabled": true,
+                                "clientCertEnabled": false,
+                                "hostNamesDisabled": false,
+                                "dailyMemoryTimeQuota": 0,
+                                "httpsOnly": false
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/slots/config",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue/web')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('site_name'),'blue')]"
+                            ],
+                            "properties": {
+                                "numberOfWorkers": 1,
+                                "defaultDocuments": [
+                                    "Default.htm",
+                                    "Default.html",
+                                    "Default.asp",
+                                    "index.htm",
+                                    "index.html",
+                                    "iisstart.htm",
+                                    "default.aspx",
+                                    "index.php",
+                                    "hostingstart.html"
+                                ],
+                                "netFrameworkVersion": "v4.0",
+                                "phpVersion": "7.3",
+                                "requestTracingEnabled": false,
+                                "remoteDebuggingEnabled": false,
+                                "httpLoggingEnabled": false,
+                                "logsDirectorySizeLimit": 35,
+                                "detailedErrorLoggingEnabled": false,
+                                "publishingUsername": "$parameters('site_name')",
+                                "azureStorageAccounts": {},
+                                "scmType": "None",
+                                "use32BitWorkerProcess": true,
+                                "webSocketsEnabled": false,
+                                "alwaysOn": true,
+                                "managedPipelineMode": "Integrated",
+                                "virtualApplications": [
+                                    {
+                                        "virtualPath": "/",
+                                        "physicalPath": "site\\wwwroot",
+                                        "preloadEnabled": true
+                                    }
+                                ],
+                                "loadBalancing": "LeastRequests",
+                                "autoHealEnabled": false,
+                                "ipSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictions": [
+                                    {
+                                        "ipAddress": "Any",
+                                        "action": "Allow",
+                                        "priority": 1,
+                                        "name": "Allow all",
+                                        "description": "Allow all access"
+                                    }
+                                ],
+                                "scmIpSecurityRestrictionsUseMain": false,
+                                "http20Enabled": true,
+                                "minTlsVersion": "1.2",
+                                "ftpsState": "AllAllowed",
+                                "reservedInstanceCount": 0
+                            }
+                        },
+                        {
+                            "type": "Microsoft.Web/sites/slots/hostNameBindings",
+                            "apiVersion": "2018-11-01",
+                            "name": "[concat(parameters('site_name'), '/blue/', parameters('site_name'),'-blue', '.azurewebsites.net')]",
+                            "location": "Australia East",
+                            "dependsOn": [
+                                "[resourceId('Microsoft.Web/sites/slots', parameters('site_name'), 'blue')]"
+                            ],
+                            "properties": {
+                                "siteName": "[concat(parameters('site_name'),'(blue)')]",
+                                "hostNameType": "Verified"
+                            }
+                        },
+                        {
+                			"type": "microsoft.insights/components",
+                			"apiVersion": "2018-05-01-preview",
+                			"name": "[variables('applicationInsightsName')]",
+                			"location": "[resourceGroup().location]",
+                			"kind": "web",
+                			"properties": {
+                				"Application_Type": "web"
+                			}
+                		},
+                        {
+                			"apiVersion": "2018-11-01",
+                			"type": "Microsoft.Web/sites",
+                			"name": "[variables('functionAppName')]",
+                			"identity": {
+                				"type": "SystemAssigned"
+                			},
+                			"location": "Australia East",
+                			"kind": "functionapp",
+                			"dependsOn": [
+                				"[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+                				"[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
+                			],
+                			"resources": [{
+                					"type": "config",
+                					"name": "appsettings",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]",
+                						"[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultName'))]"
+                					],
+                					"properties": {
+                						"AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                					    "ActualPayDaysToDelete": "15",
+                						"APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('microsoft.insights/components/', variables('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                						"Azure.KeyVault": "[variables('keyVaultName')]",
+                						"AzureStorage.ConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                						"AzureStorage.Container": "",
+                						"AzureWebJobs.DayforceReportColumnNames.Disabled": "0",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreDaily.Disabled": "1",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreWeekly.Disabled": "1",
+                						"AzureWebJobs.ExtractHoursDataFromDayforceAndImportToOperationalDataStore.Disabled": "1",
+                						"AzureWebJobs.RunDataPipelineSchedule.Disabled": "0",
+                						"AzureWebJobs.RunSpecificDataPipeline.Disabled": "0",
+                						"AzureWebJobs.SchemaDiscrepanciesBetweenDayforceReportsAndOdsTables.Disabled": "1",
+                						"AzureWebJobs.SendNotificationEmails.Disabled": "1",
+                						"AzureWebJobs.Status.Disabled": "0",
+                						"AzureWebJobs.TriggerDataPipelineSchedule.Disabled": 1,
+                						"ClickSend.BaseServiceUrl": "[parameters('ClickSend.BaseServiceUrl')]",
+                						"ClickSend.PasswordSecret": "clicksend-api-password",
+                						"ClickSend.UsernameSecret": "clicksend-api-username",
+                						"CronSchedule": "0 0 4,6,8,10,12,14,16,18,20,22 * * *",
+                						"DataPipeline.ApplyDataMaskingOnUpdate": "true",
+                						"DataPipeline.ConnectionString": "[parameters('DataPipeline.ConnectionString')]",
+                						"DataPipeline.CronSchedule": "0 */5 * * * *",
+                						"DataPipeline.DynamicAdjustingWindow": "true",
+                						"DataPipelineValidation.CronSchedule": "0 */5 * * * *",
+                						"Dayforce.CompanyName": "MHJ",
+                						"Dayforce.SoapApi.BypassApiForReportList": "",
+                						"Dayforce.SoapApi.PasswordSecret": "dayforce-api-password",
+                						"Dayforce.SoapApi.Url": "[parameters('Dayforce.SoapApi.Url')]",
+                						"Dayforce.SoapApi.UsernameSecret": "dayforce-api-username",
+                						"DayforceApiTimeoutInMinutes": "15",
+                						"DaysAgoStartDate": "7",
+                						"DaysOfNewOrModifiedHoursDataToImport": "5",
+                						"Email.DisplayName": "[parameters('Email.DisplayName')]",
+                						"Email.FromAddress": "[parameters('Email.FromAddress')]",
+                						"Email.Host": "[parameters('Email.Host')]",
+                						"Email.Port": "[parameters('Email.Port')]",
+                                      	"Email.To": "[parameters('Email.To')]",
+                						"Email.StatusCheck.ToAddress": "[parameters('Email.StatusCheck.ToAddress')]",
+                						"Email.Username":"[parameters('Email.Username')]",
+                						"EmailScheduleTriggerTime": "0 */5 * * * *",
+                						"Environment": "[parameters('EnvironmentName')]",
+                						"FUNCTIONS_EXTENSION_VERSION": "~3",
+                						"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                						"Logging.Seq.ApiKey": "[parameters('Logging.Seq.ApiKey')]",
+                						"Logging.Seq.Server": "[parameters('Logging.Seq.Server')]",
+                						"MinimumNumberOfDaysToKeepDayforceNotificationHistory": "30",
+                						"MinimumNumberOfDaysToKeepEmailNotificationHistory": "30",
+                						"OperationalDataStore.ConnectionString":  "[parameters('OperationalDataStore.ConnectionString')]",
+                						"PurgeDayforceNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"PurgeEmailNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"RetryCount": "2",
+                						"RetryIntervalInMinutes": "2",
+                						"SendScheduledDayforceNotificationsTriggerTime": "0 */5 * * * *",
+                                      	"SFTP.FileRemoval.DaysToKeep": 3,
+                    					"SFTP.ServerSecret": "[parameters('SFTP.ServerSecret')]",
+                    					"SFTP.UsernameSecret": "[parameters('SFTP.UsernameSecret')]",
+                    					"SFTP.PasswordSecret": "[parameters('SFTP.PasswordSecret')]",
+                						"WEBSITE_TIME_ZONE": "E. Australia Standard Time"
+                					}
+                				},
+                				{
+                					"type": "config",
+                					"name": "web",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                					],
+                					"properties": {
+                						"ftpsState": "FtpsOnly"
+                					}
+                				}
+                			],
+                            "properties": {
+                              "serverFarmId" :"[variables('serverFarmId')]",
+                              "httpsOnly": true
+                            }
+                		},
+                       {
+                			"apiVersion": "2018-11-01",
+                			"type": "Microsoft.Web/sites/slots",
+                			"name": "[concat(variables('functionAppName'),'/blue')]",
+                			"identity": {
+                				"type": "SystemAssigned"
+                			},
+                			"location": "Australia East",
+                			"kind": "functionapp",
+                			"dependsOn": [
+                				"[resourceId('Microsoft.Web/sites', variables('functionAppName'))]"
+                			],
+                			"resources": [{
+                					"type": "config",
+                					"name": "appsettings",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites/slots', variables('functionAppName'),'blue')]"
+                					],
+                					"properties": {
+                						"AzureWebJobsStorage": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                					    "ActualPayDaysToDelete": "15",
+                						"APPINSIGHTS_INSTRUMENTATIONKEY": "[reference(resourceId('microsoft.insights/components/', variables('applicationInsightsName')), '2015-05-01').InstrumentationKey]",
+                						"Azure.KeyVault": "[variables('keyVaultName')]",
+                						"AzureStorage.ConnectionString": "[concat('DefaultEndpointsProtocol=https;AccountName=', variables('storageAccountName'), ';AccountKey=', listKeys(variables('storageAccountid'),'2015-05-01-preview').key1)]",
+                						"AzureStorage.Container": "",
+                						"AzureWebJobs.DayforceReportColumnNames.Disabled": "0",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreDaily.Disabled": "1",
+                						"AzureWebJobs.ExtractDataFromDayforceAndImportToOpertaionDataStoreWeekly.Disabled": "1",
+                						"AzureWebJobs.ExtractHoursDataFromDayforceAndImportToOperationalDataStore.Disabled": "1",
+                						"AzureWebJobs.RunDataPipelineSchedule.Disabled": "0",
+                						"AzureWebJobs.RunSpecificDataPipeline.Disabled": "0",
+                						"AzureWebJobs.SchemaDiscrepanciesBetweenDayforceReportsAndOdsTables.Disabled": "1",
+                						"AzureWebJobs.SendNotificationEmails.Disabled": "1",
+                						"AzureWebJobs.Status.Disabled": "0",
+                						"AzureWebJobs.TriggerDataPipelineSchedule.Disabled": 1,
+                						"ClickSend.BaseServiceUrl": "[parameters('ClickSend.BaseServiceUrl')]",
+                						"ClickSend.PasswordSecret": "clicksend-api-password",
+                						"ClickSend.UsernameSecret": "clicksend-api-username",
+                						"CronSchedule": "0 0 4,6,8,10,12,14,16,18,20,22 * * *",
+                						"DataPipeline.ApplyDataMaskingOnUpdate": "true",
+                						"DataPipeline.ConnectionString": "[parameters('DataPipeline.ConnectionString')]",
+                						"DataPipeline.CronSchedule": "0 */5 * * * *",
+                						"DataPipeline.DynamicAdjustingWindow": "true",
+                						"DataPipelineValidation.CronSchedule": "0 */5 * * * *",
+                						"Dayforce.CompanyName": "MHJ",
+                						"Dayforce.SoapApi.BypassApiForReportList": "",
+                						"Dayforce.SoapApi.PasswordSecret": "dayforce-api-password",
+                						"Dayforce.SoapApi.Url": "[parameters('Dayforce.SoapApi.Url')]",
+                						"Dayforce.SoapApi.UsernameSecret": "dayforce-api-username",
+                						"DayforceApiTimeoutInMinutes": "15",
+                						"DaysAgoStartDate": "7",
+                						"DaysOfNewOrModifiedHoursDataToImport": "5",
+                						"Email.DisplayName": "[parameters('Email.DisplayName')]",
+                						"Email.FromAddress": "[parameters('Email.FromAddress')]",
+                						"Email.Host": "[parameters('Email.Host')]",
+                						"Email.Port": "[parameters('Email.Port')]",
+                                      	"Email.To": "[parameters('Email.To')]",
+                						"Email.StatusCheck.ToAddress": "[parameters('Email.StatusCheck.ToAddress')]",
+                						"Email.Username":"[parameters('Email.Username')]",
+                						"EmailScheduleTriggerTime": "0 */5 * * * *",
+                						"Environment": "[parameters('EnvironmentName')]",
+                						"FUNCTIONS_EXTENSION_VERSION": "~3",
+                						"FUNCTIONS_WORKER_RUNTIME": "dotnet",
+                						"Logging.Seq.ApiKey": "[parameters('Logging.Seq.ApiKey')]",
+                						"Logging.Seq.Server": "[parameters('Logging.Seq.Server')]",
+                						"MinimumNumberOfDaysToKeepDayforceNotificationHistory": "30",
+                						"MinimumNumberOfDaysToKeepEmailNotificationHistory": "30",
+                						"OperationalDataStore.ConnectionString":  "[parameters('OperationalDataStore.ConnectionString')]",
+                						"PurgeDayforceNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"PurgeEmailNotificationHistoryTriggerTime": "0 0 0 * * *",
+                						"RetryCount": "2",
+                						"RetryIntervalInMinutes": "2",
+                						"SendScheduledDayforceNotificationsTriggerTime": "0 */5 * * * *",
+                                      	"SFTP.FileRemoval.DaysToKeep": 3,
+                    					"SFTP.ServerSecret": "[parameters('SFTP.ServerSecret')]",
+                    					"SFTP.UsernameSecret": "[parameters('SFTP.UsernameSecret')]",
+                    					"SFTP.PasswordSecret": "[parameters('SFTP.PasswordSecret')]",
+                						"WEBSITE_TIME_ZONE": "E. Australia Standard Time"
+                					}
+                				},
+                				{
+                					"type": "config",
+                					"name": "web",
+                					"apiVersion": "2018-11-01",
+                					"dependsOn": [
+                						"[resourceId('Microsoft.Web/sites/slots', variables('functionAppName'),'blue')]"
+                					],
+                					"properties": {
+                						"ftpsState": "FtpsOnly"
+                					}
+                				}
+                			],
+                            "properties": {
+                              "serverFarmId" :"[variables('serverFarmId')]",
+                              "httpsOnly": true
+                            }
+                		}
+                   ]
+                }
+            EOT
+            Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\" #{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.To\":{\"value\":\"#{Email.To}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheck.ToAddress\":{\"value\":\"#{Email.StatusCheck.ToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"},\"SFTP.ServerSecret\":{\"value\":\"#{SFTP.ServerSecret}\"},\"SFTP.UsernameSecret\":{\"value\":\"#{SFTP.UsernameSecret}\"},\"SFTP.PasswordSecret\":{\"value\":\"#{SFTP.PasswordSecret}\"},\"SFTP.FileRemoval.DaysToKeep\":{\"value\":\"#{SFTP.FileRemoval.DaysToKeep}\"}}"
+            Octopus.Action.Azure.TemplateSource = "Inline"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Create Web App Deployment Target" {
+
+    action {
+        properties = {
+            AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
+            EnvironmentName = "#{Octopus.Environment.Name}"
+            Octopus.Action.Template.Id = "ActionTemplates-541"
+            Octopus.Action.Template.Version = "10"
+            OctopusRoles = "dayforce-data-pipeline-app"
+            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            TargetName = "#{Octopus.DeploymentTarget.WebApp}"
+            WebAppName = "#{Azure.AppName}"
+        }
+        worker_pool = "Default Worker Pool"
+    }
+}
+
+step "Create Function App Deployment Target" {
+
+    action {
+        properties = {
+            AzureServicePrinciple = "#{Azure.OctopusAccount.Name}"
+            EnvironmentName = "#{Octopus.Environment.Name}"
+            Octopus.Action.Template.Id = "ActionTemplates-541"
+            Octopus.Action.Template.Version = "10"
+            OctopusRoles = "dayforce-integrations-onyx"
+            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            TargetName = "#{Octopus.DeploymentTarget.FunctionApp}"
+            WebAppName = "#{Azure.FunctionAppName}"
+        }
+        worker_pool = "Default Worker Pool"
+    }
+}
+
+step "Deploy DataPipeline Database" {
+    properties = {
+        Octopus.Action.TargetRoles = "azure-sql"
+    }
+
+    action {
+        action_type = "Octopus.TentaclePackage"
+        properties = {
+            Octopus.Action.EnabledFeatures = ",Octopus.Features.ConfigurationTransforms,Octopus.Features.ConfigurationVariables"
+            Octopus.Action.Package.AutomaticallyRunConfigurationTransformationFiles = "True"
+            Octopus.Action.Package.AutomaticallyUpdateAppSettingsAndConnectionStrings = "True"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
+            Octopus.Action.Package.PackageId = "MHJ.Dayforce.DataPipeline.Database"
+            Octopus.Action.RunOnServer = "false"
+        }
+        worker_pool_variable = ""
+
+        packages {
+            acquisition_location = "Server"
+            feed = "Octopus Server (built-in)"
+            package_id = "MHJ.Dayforce.DataPipeline.Database"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "Restart Slot - Web App" {
+
+    action {
+        action_type = "Octopus.AzurePowerShell"
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $resourceGroupName = $OctopusParameters["Azure.ResourceGroup.Name"]
+                $webAppName = $OctopusParameters["Azure.AppName"]
+                $slotName = "blue"
+                
+                Write-Host "Restarting Web App $webAppName Slot $slotName"
+                
+                Restart-AzureRmWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -Slot $slotName
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Restart Slot - Function App" {
+
+    action {
+        action_type = "Octopus.AzurePowerShell"
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $resourceGroupName = $OctopusParameters["Azure.ResourceGroup.Name"]
+                $webAppName = $OctopusParameters["Azure.FunctionAppName"]
+                $slotName = "blue"
+                
+                Write-Host "Restarting Web App $webAppName Slot $slotName"
+                
+                Restart-AzureRmWebAppSlot -ResourceGroupName $resourceGroupName -Name $webAppName -Slot $slotName
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Deploy Web App" {
+    properties = {
+        Octopus.Action.TargetRoles = "dayforce-data-pipeline-app"
+    }
+
+    action {
+        action_type = "Octopus.AzureWebApp"
+        properties = {
+            Octopus.Action.Azure.AppOffline = "True"
+            Octopus.Action.Azure.DeploymentSlot = "blue"
+            Octopus.Action.Azure.RemoveAdditionalFiles = "True"
+            Octopus.Action.Azure.UseChecksum = "False"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.JsonConfigurationVariables"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
+            Octopus.Action.Package.JsonConfigurationVariablesTargets = "**\\*.json"
+            Octopus.Action.Package.PackageId = "MHJ.Dayforce.DataPipeline.Web"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Default Worker Pool"
+
+        packages {
+            acquisition_location = "Server"
+            feed = "Octopus Server (built-in)"
+            package_id = "MHJ.Dayforce.DataPipeline.Web"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "Deploy Function App" {
+    properties = {
+        Octopus.Action.TargetRoles = "dayforce-integrations-onyx"
+    }
+
+    action {
+        action_type = "Octopus.AzureWebApp"
+        properties = {
+            Octopus.Action.Azure.AppOffline = "False"
+            Octopus.Action.Azure.DeploymentSlot = "blue"
+            Octopus.Action.Azure.RemoveAdditionalFiles = "True"
+            Octopus.Action.Azure.UseChecksum = "False"
+            Octopus.Action.Package.DownloadOnTentacle = "False"
+            Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
+            Octopus.Action.Package.PackageId = "MHJ.Dayforce.Integrations.Onyx.Service"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Default Worker Pool"
+
+        packages {
+            acquisition_location = "Server"
+            feed = "Octopus Server (built-in)"
+            package_id = "MHJ.Dayforce.Integrations.Onyx.Service"
+            properties = {
+                SelectionMode = "immediate"
+            }
+        }
+    }
+}
+
+step "Update Function App Settings" {
+
+    action {
+        action_type = "Octopus.AzurePowerShell"
+        is_disabled = true
+        properties = {
+            Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.EnabledFeatures = "Octopus.Features.SelectPowerShellEditionForWindows"
+            Octopus.Action.PowerShell.Edition = "Core"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                function UpdateAppSettings {
+                 param( [string]$ResourceGroup, [string]$AppName, [string]$Slot, [hashtable]$AppSettings )
+                
+                    Write-Host "Loading existing AppSettings from $ResourceGroup\$AppName\$Slot"
+                    $webApp = Get-AzureRmWebAppSlot -ResourceGroupName $ResourceGroup -Name $AppName -Slot $Slot
+                
+                    Write-Host "Applying new AppSettings"
+                    $hash = @{}
+                    ForEach ($kvp in $webApp.SiteConfig.AppSettings) {
+                        $hash[$kvp.Name] = $kvp.Value
+                        $key = $kvp.Name
+                        $value = $kvp.Value
+                        Write-Host "Existing: $key = $value"
+                    }
+                
+                    ForEach ($key in $AppSettings.Keys) {
+                        $hash[$key] = $AppSettings[$key]
+                        $value = $AppSettings[$key]
+                        Write-Host "New: $key = $value"
+                    }
+                    
+                  
+                    Write-Host "Saving AppSettings"
+                    Set-AzureRMWebAppSlot -ResourceGroupName $ResourceGroup -Name $AppName -AppSettings $hash -Slot $Slot
+                }
+                
+                UpdateAppSettings -AppSettings @{            
+                            "CronSchedule" = $OctopusParameters["CronSchedule"];			
+                			"Environment" = $OctopusParameters["Environment"];
+                			"Logging.Seq.Server" = $OctopusParameters["Logging.Seq.Server"];
+                			"Logging.Seq.ApiKey" = $OctopusParameters["Logging.Seq.ApiKey"];
+                			"Azure.KeyVault" = $OctopusParameters["Azure.KeyVault"];
+                			"Dayforce.CompanyName" = $OctopusParameters["Dayforce.CompanyName"];
+                			"Dayforce.SoapApi.Url" = $OctopusParameters["Dayforce.SoapApi.Url"];
+                			"Dayforce.SoapApi.UsernameSecret" = $OctopusParameters["Dayforce.SoapApi.UsernameSecret"];
+                			"Dayforce.SoapApi.PasswordSecret" = $OctopusParameters["Dayforce.SoapApi.PasswordSecret"];
+                			"OperationalDataStore.ConnectionString" = $OctopusParameters["OperationalDataStore.ConnectionString"];
+                			"WEBSITE_TIME_ZONE" = $OctopusParameters["WEBSITE_TIME_ZONE"];
+                			"DaysOfNewOrModifiedHoursDataToImport" = $OctopusParameters["DaysOfNewOrModifiedHoursDataToImport"];
+                			"RetryCount" = $OctopusParameters["RetryCount"];
+                			"RetryIntervalInMinutes" = $OctopusParameters["RetryIntervalInMinutes"];
+                			"SendScheduledDayforceNotificationsTriggerTime" = $OctopusParameters["SendScheduledDayforceNotificationsTriggerTime"];
+                			"DaysAgoStartDate" = $OctopusParameters["DaysAgoStartDate"];
+                			"ActualPayDaysToDelete" = $OctopusParameters["ActualPayDaysToDelete"];
+                			"DayforceApiTimeoutInMinutes" = $OctopusParameters["DayforceApiTimeoutInMinutes"];
+                			"DataPipeline.ConnectionString" = $OctopusParameters["DataPipeline.ConnectionString"];
+                			"DataPipeline.DynamicAdjustingWindow" = $OctopusParameters["DataPipeline.DynamicAdjustingWindow"];  
+                            "DataPipeline.ApplyDataMaskingOnUpdate" = $OctopusParameters["DataPipeline.ApplyDataMaskingOnUpdate"];
+                            "DataPipeline.CronSchedule" = $OctopusParameters["DataPipeline.CronSchedule"];
+                            "Email.Port" = $OctopusParameters["Email.Port"];
+                            "Email.Host" = $OctopusParameters["Email.Host"];
+                            "Email.DisplayName" = $OctopusParameters["Email.DisplayName"];
+                            "Email.FromAddress" = $OctopusParameters["Email.FromAddress"];
+                            "Email.StatusCheck.ToAddress" = $OctopusParameters["Email.StatusCheck.ToAddress"];
+                			"Email.Username" = $OctopusParameters["Email.Username"];
+                            "Dayforce.SoapApi.BypassApiForReportList" = $OctopusParameters["Dayforce.SoapApi.BypassApiForReportList"];
+                            "AzureStorage.ConnectionString" = $OctopusParameters["AzureStorage.ConnectionString"];
+                            "AzureStorage.Container" = $OctopusParameters["AzureStorage.Container"];
+                            "PurgeDayforceNotificationHistoryTriggerTime" = $OctopusParameters["PurgeDayforceNotificationHistoryTriggerTime"];
+                            "MinimumNumberOfDaysToKeepDayforceNotificationHistory" = $OctopusParameters["MinimumNumberOfDaysToKeepDayforceNotificationHistory"];
+                            "DataPipelineValidation.CronSchedule" = $OctopusParameters["DataPipelineValidation.CronSchedule"];
+                            "ClickSend.BaseServiceUrl" = $OctopusParameters["ClickSend.BaseServiceUrl"];
+                            "ClickSend.UsernameSecret" = $OctopusParameters["ClickSend.UsernameSecret"];
+                            "ClickSend.PasswordSecret" = $OctopusParameters["ClickSend.PasswordSecret"];
+                            } `
+                    -ResourceGroup $OctopusParameters["Azure.ResourceGroup.Name"] `
+                    -AppName $OctopusParameters["Azure.FunctionAppName"] `
+                    -Slot "blue"
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Swap Slot - Web App" {
+
+    action {
+        properties = {
+            AppName = "#{Azure.AppName}"
+            AzureAccount = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Template.Id = "ActionTemplates-1061"
+            Octopus.Action.Template.Version = "2"
+            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            SlotName = "blue"
+            SmokeTestResponseCode = "200"
+            smokeTestTimeoutSecs = "180"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Swap Slot - Function App" {
+    start_trigger = "StartWithPrevious"
+
+    action {
+        properties = {
+            AppName = "#{Azure.FunctionAppName}"
+            AzureAccount = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.Template.Id = "ActionTemplates-1061"
+            Octopus.Action.Template.Version = "2"
+            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
+            SlotName = "blue"
+            SmokeTestResponseCode = "#{Azure.FunctionApp.SlotSwap.ResponseCode}"
+            smokeTestTimeoutSecs = "180"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Delete Web App Deployment Target" {
+    condition = "Always"
 
     action {
         action_type = "Octopus.Script"
         properties = {
-            Octopus.Action.RunOnServer = "false"
-            Octopus.Action.Script.ScriptBody = "write-host 'hi'"
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $environment = $OctopusParameters["Octopus.Environment.Name"]
+                $targetName = "Dayforce Data Pipeline - $environment"
+                
+                Remove-OctopusTarget -targetIdOrName $targetName
+            EOT
             Octopus.Action.Script.ScriptSource = "Inline"
             Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
         }
-        worker_pool_variable = ""
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Delete Function App Deployment Target" {
+    condition = "Always"
+    start_trigger = "StartWithPrevious"
+
+    action {
+        action_type = "Octopus.Script"
+        properties = {
+            Octopus.Action.Script.ScriptBody = <<-EOT
+                $appName = $OctopusParameters["Octopus.DeploymentTarget.FunctionApp"]
+                $environment = $OctopusParameters["Octopus.Environment.Name"]
+                $targetName = "$appName - $environment"
+                
+                Remove-OctopusTarget -targetIdOrName $targetName
+            EOT
+            Octopus.Action.Script.ScriptSource = "Inline"
+            Octopus.Action.Script.Syntax = "PowerShell"
+            OctopusUseBundledTooling = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Alert to Teams for Scheduled Deployment Errors" {
+    condition = "Variable"
+    properties = {
+        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Deployment.Error}#{if Octopus.Deployment.CreatedBy.Username == \"system\"}True#{/if}#{/if}"
+    }
+
+    action {
+        environments = ["Production"]
+        properties = {
+            ActionTitle = "Current Status"
+            ActionUrl = "https://octopus.michaelhill.global#{Octopus.Web.DeploymentLink}"
+            FirstAlert = "There has been an error in the scheduled production deployment, investigate using the link below"
+            FirstTitle = "Status: "
+            Header = "#{Octopus.Project.Name}"
+            IconUrl = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/97/Dialog-error-round.svg/48px-Dialog-error-round.svg.png"
+            Octopus.Action.Template.Id = "ActionTemplates-1101"
+            Octopus.Action.Template.Version = "6"
+            OctopusUseBundledTooling = "False"
+            Teams.WebHookUrl = "https://michaelhill.webhook.office.com/webhookb2/28b8b4da-b244-4333-8d82-4b2e34013255@fff1b7fc-e70a-4033-9508-e3ac2e2544fa/IncomingWebhook/414fb4cdbca24815b6a679ecdf115432/dbbb1f9a-1622-4723-aec5-12cd9c425afd"
+            Timeout = "60"
+            Title = "Scheduled Production Deployment Error"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Log to Seq for Scheduled Deployment Errors" {
+    condition = "Variable"
+    properties = {
+        Octopus.Step.ConditionVariableExpression = "#{if Octopus.Deployment.Error}#{if Octopus.Deployment.CreatedBy.Username == \"system\"}True#{/if}#{/if}"
+    }
+
+    action {
+        environments = ["Production"]
+        properties = {
+            Octopus.Action.Template.Id = "ActionTemplates-1222"
+            Octopus.Action.Template.Version = "2"
+            OctopusUseBundledTooling = "False"
+            SeqServerUrl = "#{SeqApiUrl}"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Smoke Test" {
+
+    action {
+        notes = "Do an HTTP GET against `/dayforcenotificationstatus` to ensure that it is returning `200 OK`.  The route will return `500 Internal Server Error` if there is an issue."
+        properties = {
+            ExpectedCode = "200"
+            Octopus.Action.Template.Id = "ActionTemplates-162"
+            Octopus.Action.Template.Version = "18"
+            OctopusUseBundledTooling = "False"
+            TimeoutSeconds = "300"
+            Uri = "#{AzureFunctions:ServiceBaseAddress}/dayforceNotificationStatus"
+            UseWindowsAuth = "False"
+        }
+        worker_pool = "Windows Server 2019 Docker Host"
+
+        container {
+            feed = "Docker Hub"
+            image = "#{Docker.WorkerImage}"
+        }
+    }
+}
+
+step "Alert Developers on Failed Deployments" {
+    condition = "Failure"
+
+    action {
+        action_type = "Octopus.Email"
+        notes = "Email Balan, Bimal and Jason when this deployment to any environment has failed."
+        properties = {
+            Octopus.Action.Email.Body = <<-EOT
+                <h1>Deployment of #{Octopus.Project.Name} #{Octopus.Release.Number} to #{Octopus.Environment.Name}</h1>
+                <p>
+                  <em>Initiated by
+                    #{unless Octopus.Deployment.CreatedBy.DisplayName}#{Octopus.Deployment.CreatedBy.Username}#{/unless}
+                    #{if Octopus.Deployment.CreatedBy.DisplayName}#{Octopus.Deployment.CreatedBy.DisplayName}#{/if}
+                    #{if Octopus.Deployment.CreatedBy.EmailAddress} (<a href="mailto: #{Octopus.Deployment.CreatedBy.EmailAddress}">#{Octopus.Deployment.CreatedBy.EmailAddress}</a>)#{/if}
+                    at #{Octopus.Deployment.Created}</em>
+                </p>
+                <p>View the <a href="https://octopus.michaelhill.com#{Octopus.Web.DeploymentLink}">deployment log</a>.</p>
+                
+            EOT
+            Octopus.Action.Email.IsHtml = "True"
+            Octopus.Action.Email.Subject = "Deployment of #{Octopus.Project.Name} Failed"
+            Octopus.Action.Email.To = "balan.sinniah@michaelhill.com.au; bimal.sharma@michaelhill.com.au; Jason.Hess@michaelhill.com.au"
+            Octopus.Action.RunOnServer = "false"
+        }
     }
 }
