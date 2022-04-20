@@ -444,6 +444,7 @@ step "Deploy KeyVault" {
             EOT
             Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.ResourceGroup.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\"#{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheck.ToAddress\":{\"value\":\"#{Email.StatusCheck.ToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"}}"
             Octopus.Action.Azure.TemplateSource = "Inline"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
@@ -1207,6 +1208,7 @@ step "Deploy Azure Apps" {
             EOT
             Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\" #{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheckToAddress\":{\"value\":\"#{Email.StatusCheckToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"Email.To\":{\"value\":\"#{Email.To}\"},\"Email.ToFinance\":{\"value\":\"#{Email.ToFinance}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"},\"SFTP.ServerSecret\":{\"value\":\"#{SFTP.ServerSecret}\"},\"SFTP.UsernameSecret\":{\"value\":\"#{SFTP.UsernameSecret}\"},\"SFTP.PasswordSecret\":{\"value\":\"#{SFTP.PasswordSecret}\"},\"SFTP.FileRemoval.DaysToKeep\":{\"value\":\"#{SFTP.FileRemoval.DaysToKeep}\"}}"
             Octopus.Action.Azure.TemplateSource = "Inline"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
@@ -1371,6 +1373,7 @@ step "Assign KeyVault AccesPolicies" {
             EOT
             Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"EnvironmentName\":{\"value\":\"#{Octopus.Environment.Name}\"}}"
             Octopus.Action.Azure.TemplateSource = "Inline"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
@@ -2374,6 +2377,7 @@ step "Setup Web App" {
             EOT
             Octopus.Action.Azure.ResourceGroupTemplateParameters = "{\"site_name\":{\"value\":\"#{Azure.AppName}\"},\"app_service_plan\":{\"value\":\"#{Azure.AppServicePlan.Name}\"},\"app_service_plan_resource_group\":{\"value\":\"#{Azure.AppServicePlan.ResourceGroupName}\"},\"Azure.FunctionAppName\":{\"value\":\"#{Azure.FunctionAppName}\"},\"Azure.KeyVault\":{\"value\":\"#{Azure.KeyVault}\"},\"Azure.StorageAccountName\":{\"value\":\" #{Azure.StorageAccountName}\"},\"EnvironmentName\":{\"value\":\"#{Environment}\"},\"dayforce-api-password\":{\"value\":\"#{Dayforce.Api.Password}\"},\"dayforce-api-username\":{\"value\":\"#{Dayforce.Api.UserName}\"},\"adp-etivity-transfer-storage-connection\":{\"value\":\"#{Adp.Etivity.Transfer.Storage.Connection}\"},\"adp-pgp-passphrase\":{\"value\":\"#{Adp.Pgp.Passphrase}\"},\"adp-pgp-privatekey\":{\"value\":\"#{Adp.Pgp.Privatekey}\"},\"adp-sftp-password\":{\"value\":\"#{Adp.Sftp.Password}\"},\"adp-sftp-username\":{\"value\":\"#{Adp.Sftp.Username}\"},\"clicksend-api-password\":{\"value\":\"#{Clicksend.Api.Password}\"},\"clicksend-api-username\":{\"value\":\"#{Clicksend.Api.Username}\"},\"dayforce-sftp-password\":{\"value\":\"#{Dayforce.Sftp.Password}\"},\"dayforce-sftp-username\":{\"value\":\"#{Dayforce.Sftp.Username}\"},\"dayforce-ui-password\":{\"value\":\"#{Dayforce.Ui.Password}\"},\"dayforce-ui-username\":{\"value\":\"#{Dayforce.Ui.Username}\"},\"email-password\":{\"value\":\"#{Email.Password}\"},\"exchange-admin-password\":{\"value\":\"#{Exchange.Admin.Password}\"},\"pageup-newhire-email-password\":{\"value\":\"#{Pageup.Newhire.Email.Password}\"},\"storageAccountType\":{\"value\":\"Standard_LRS\"},\"ClickSend.BaseServiceUrl\":{\"value\":\"#{ClickSend.BaseServiceUrl}\"},\"DataPipeline.ConnectionString\":{\"value\":\"#{DataPipeline.ConnectionString}\"},\"Dayforce.SoapApi.Url\":{\"value\":\"#{Dayforce.SoapApi.Url}\"},\"Email.DisplayName\":{\"value\":\"#{Email.DisplayName}\"},\"Email.FromAddress\":{\"value\":\"#{Email.FromAddress}\"},\"Email.To\":{\"value\":\"#{Email.To}\"},\"Email.Host\":{\"value\":\"#{Email.Host}\"},\"Email.Port\":{\"value\":\"#{Email.Port}\"},\"Email.StatusCheck.ToAddress\":{\"value\":\"#{Email.StatusCheck.ToAddress}\"},\"Email.Username\":{\"value\":\"#{Email.Username}\"},\"OperationalDataStore.ConnectionString\":{\"value\":\"#{OperationalDataStore.ConnectionString}\"},\"Logging.Seq.ApiKey\":{\"value\":\"#{Logging.Seq.ApiKey}\"},\"Logging.Seq.Server\":{\"value\":\"#{Logging.Seq.Server}\"},\"SFTP.ServerSecret\":{\"value\":\"#{SFTP.ServerSecret}\"},\"SFTP.UsernameSecret\":{\"value\":\"#{SFTP.UsernameSecret}\"},\"SFTP.PasswordSecret\":{\"value\":\"#{SFTP.PasswordSecret}\"},\"SFTP.FileRemoval.DaysToKeep\":{\"value\":\"#{SFTP.FileRemoval.DaysToKeep}\"}}"
             Octopus.Action.Azure.TemplateSource = "Inline"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
@@ -2420,6 +2424,7 @@ step "Restart Slot - Web App" {
         action_type = "Octopus.AzurePowerShell"
         properties = {
             Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $resourceGroupName = $OctopusParameters["Azure.ResourceGroup.Name"]
                 $webAppName = $OctopusParameters["Azure.AppName"]
@@ -2448,6 +2453,7 @@ step "Restart Slot - Function App" {
         action_type = "Octopus.AzurePowerShell"
         properties = {
             Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
+            Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $resourceGroupName = $OctopusParameters["Azure.ResourceGroup.Name"]
                 $webAppName = $OctopusParameters["Azure.FunctionAppName"]
@@ -2487,6 +2493,7 @@ step "Deploy Web App" {
             Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
             Octopus.Action.Package.JsonConfigurationVariablesTargets = "**\\*.json"
             Octopus.Action.Package.PackageId = "api-package"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Default Worker Pool"
@@ -2517,6 +2524,7 @@ step "Deploy Function App" {
             Octopus.Action.Package.DownloadOnTentacle = "False"
             Octopus.Action.Package.FeedId = "Octopus Server (built-in)"
             Octopus.Action.Package.PackageId = "api-package"
+            Octopus.Action.RunOnServer = "true"
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Default Worker Pool"
@@ -2541,6 +2549,7 @@ step "Update Function App Settings" {
             Octopus.Action.Azure.AccountId = "#{Azure.OctopusAccount.Name}"
             Octopus.Action.EnabledFeatures = "Octopus.Features.SelectPowerShellEditionForWindows"
             Octopus.Action.PowerShell.Edition = "Core"
+            Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 function UpdateAppSettings {
                  param( [string]$ResourceGroup, [string]$AppName, [string]$Slot, [hashtable]$AppSettings )
@@ -2630,6 +2639,7 @@ step "Delete Web App Deployment Target" {
     action {
         action_type = "Octopus.Script"
         properties = {
+            Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $environment = $OctopusParameters["Octopus.Environment.Name"]
                 $targetName = "Dayforce Data Pipeline - $environment"
@@ -2641,11 +2651,6 @@ step "Delete Web App Deployment Target" {
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
-
-        container {
-            feed = "Docker Hub"
-            image = "#{Docker.WorkerImage}"
-        }
     }
 }
 
@@ -2656,6 +2661,7 @@ step "Delete Function App Deployment Target" {
     action {
         action_type = "Octopus.Script"
         properties = {
+            Octopus.Action.RunOnServer = "true"
             Octopus.Action.Script.ScriptBody = <<-EOT
                 $appName = $OctopusParameters["Octopus.DeploymentTarget.FunctionApp"]
                 $environment = $OctopusParameters["Octopus.Environment.Name"]
@@ -2668,11 +2674,6 @@ step "Delete Function App Deployment Target" {
             OctopusUseBundledTooling = "False"
         }
         worker_pool = "Windows Server 2019 Docker Host"
-
-        container {
-            feed = "Docker Hub"
-            image = "#{Docker.WorkerImage}"
-        }
     }
 }
 
@@ -2700,5 +2701,19 @@ step "Alert Developers on Failed Deployments" {
             Octopus.Action.Email.To = "balan.sinniah@michaelhill.com.au; bimal.sharma@michaelhill.com.au; Jason.Hess@michaelhill.com.au"
             Octopus.Action.RunOnServer = "false"
         }
+    }
+}
+
+step "Azure Web App - Slot Swap Copy" {
+
+    action {
+        properties = {
+            azureWebAppSwap.AzAccount = "#{Azure.OctopusAccount.Name}"
+            azWebAppSwap.sourceSlot = "#{Octopus.Action.Azure.DeploymentSlot}"
+            azWebAppSwap.targetSlot = "#{slot}"
+            Octopus.Action.Template.Id = "ActionTemplates-1143"
+            Octopus.Action.Template.Version = "0"
+        }
+        worker_pool_variable = ""
     }
 }
