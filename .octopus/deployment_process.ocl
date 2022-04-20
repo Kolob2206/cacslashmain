@@ -2406,7 +2406,7 @@ step "Deploy DataPipeline Database" {
         packages {
             acquisition_location = "Server"
             feed = "Octopus Server (built-in)"
-            package_id = "MHJ.Dayforce.DataPipeline.Database"
+            package_id = "api-package"
             properties = {
                 SelectionMode = "immediate"
             }
@@ -2494,7 +2494,7 @@ step "Deploy Web App" {
         packages {
             acquisition_location = "Server"
             feed = "Octopus Server (built-in)"
-            package_id = "MHJ.Dayforce.DataPipeline.Web"
+            package_id = "api-package"
             properties = {
                 SelectionMode = "immediate"
             }
@@ -2524,7 +2524,7 @@ step "Deploy Function App" {
         packages {
             acquisition_location = "Server"
             feed = "Octopus Server (built-in)"
-            package_id = "MHJ.Dayforce.Integrations.Onyx.Service"
+            package_id = "api-package"
             properties = {
                 SelectionMode = "immediate"
             }
