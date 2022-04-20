@@ -2712,7 +2712,7 @@ step "Azure Web App - Slot Swap Copy" {
             azWebAppSwap.sourceSlot = "#{Octopus.Action.Azure.DeploymentSlot}"
             azWebAppSwap.targetSlot = "#{slot}"
             Octopus.Action.Template.Id = "ActionTemplates-1143"
-            Octopus.Action.Template.Version = "0"
+            Octopus.Action.Template.Version = "1"
         }
         worker_pool_variable = ""
     }
