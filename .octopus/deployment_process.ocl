@@ -2624,51 +2624,6 @@ step "Update Function App Settings" {
     }
 }
 
-step "Swap Slot - Web App" {
-
-    action {
-        properties = {
-            AppName = "#{Azure.AppName}"
-            AzureAccount = "#{Azure.OctopusAccount.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-1061"
-            Octopus.Action.Template.Version = "2"
-            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
-            SlotName = "blue"
-            SmokeTestResponseCode = "200"
-            smokeTestTimeoutSecs = "180"
-        }
-        worker_pool = "Windows Server 2019 Docker Host"
-
-        container {
-            feed = "Docker Hub"
-            image = "#{Docker.WorkerImage}"
-        }
-    }
-}
-
-step "Swap Slot - Function App" {
-    start_trigger = "StartWithPrevious"
-
-    action {
-        properties = {
-            AppName = "#{Azure.FunctionAppName}"
-            AzureAccount = "#{Azure.OctopusAccount.Name}"
-            Octopus.Action.Template.Id = "ActionTemplates-1061"
-            Octopus.Action.Template.Version = "2"
-            ResourceGroupName = "#{Azure.ResourceGroup.Name}"
-            SlotName = "blue"
-            SmokeTestResponseCode = "#{Azure.FunctionApp.SlotSwap.ResponseCode}"
-            smokeTestTimeoutSecs = "180"
-        }
-        worker_pool = "Windows Server 2019 Docker Host"
-
-        container {
-            feed = "Docker Hub"
-            image = "#{Docker.WorkerImage}"
-        }
-    }
-}
-
 step "Delete Web App Deployment Target" {
     condition = "Always"
 
